@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"context"
 	"flag"
 	"github.com/joho/godotenv"
@@ -93,6 +94,6 @@ func update(b2id string, b2key string) {
 		}
 		bucketSizeGauge.WithLabelValues(name).Set(float64(size))
 		bucketCountGauge.WithLabelValues(name).Set(float64(count))
-		log.Println("Bucket '%s' with %d objects occupies %s", name, count, bytesize.New(float64(size)))
+		log.Println(fmt.Sprintf("Bucket '%s' with %d objects occupies %s", name, count, bytesize.New(float64(size))))
 	}
 }
