@@ -1,14 +1,17 @@
-FROM golang:latest
-LABEL maintainer="jon@yakshaver.dev"
-
-ARG UID=1000
-ARG GID=1000
-RUN groupadd -g ${GID} -r app && useradd -u ${UID} -r -g app app
+FROM golang:latest AS builder
 
 WORKDIR /go/src/b2exporter
-COPY . .
+COPY b2exporter.go .
 RUN go get -d -v ./...
-RUN go install -v ./...
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o b2exporter ./...
 
-USER app
-ENTRYPOINT ["b2exporter"]
+#
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+
+COPY --from=builder /go/src/b2exporter/b2exporter /
+
+EXPOSE 8080
+ENTRYPOINT ["/b2exporter"]
+CMD [ "-period", "1h30m" ]
