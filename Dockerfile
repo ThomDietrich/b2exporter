@@ -1,8 +1,9 @@
-FROM golang:latest AS builder
+FROM golang:1.15-buster AS builder
 
 WORKDIR /go/src/b2exporter
 COPY b2exporter.go .
 RUN go get -d -v ./...
+#RUN go get -u ./...
 RUN CGO_ENABLED=0 GOOS=linux go build -a -o b2exporter ./...
 
 #

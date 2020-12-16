@@ -18,4 +18,4 @@ run:
 	go run b2exporter.go
 
 image:
-	docker build -t shavenyak/b2exporter:dev --build-arg APP_VERSION=$(APP_VERSION) .
+	docker build -t b2exporter:local .
